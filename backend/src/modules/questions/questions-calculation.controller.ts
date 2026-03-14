@@ -69,66 +69,10 @@ export class QuestionsCalculationController {
     const allProducts = await this.productsService.findAll({ page: 1, pageSize: 100 });
     let products: any[] = allProducts.list;
 
-    // ========== 第一步：筛选过滤层（硬匹配）==========
-    // 需要过滤的字段
-    let userShoeType = '';   // 鞋款类型
-    let userScenario = '';    // 适用场景
-    let userGender = '';      // 性别（暂忽略）
-    let userLastWidth = '';   // 楦型宽度（暂忽略）
-    
-    for (const q of questions) {
-      const userAnswer = userAnswers[q.id];
-      if (!userAnswer) continue;
-      
-      // 获取用户答案对应的选项配置（使用选项的value字段）
-      const userOptions = optionsMap[q.id]?.[userAnswer] || [];
-      const firstOption = userOptions[0];
-      
-      if (q.category === '鞋款类型匹配' && firstOption) {
-        userShoeType = firstOption.value;  // 使用选项的value
-      } else if (q.category === '适用场景匹配' && firstOption) {
-        userScenario = firstOption.value;  // 使用选项的value
-      } else if (q.category === '性别匹配') {
-        userGender = userAnswer;
-      } else if (q.category === '楦型宽度匹配') {
-        userLastWidth = userAnswer;
-      }
-    }
-
-    // 硬匹配过滤
-    const filteredProducts = products.filter(product => {
-      // 1. 鞋款类型过滤（硬匹配）
-      if (userShoeType) {
-        // 商品的鞋款类型必须匹配用户选择的
-        if (product.shoeType !== userShoeType) {
-          return false; // 鞋款类型不匹配，过滤掉
-        }
-      }
-
-      // 2. 适用场景过滤（硬匹配）
-      if (userScenario) {
-        // 商品的场景需要匹配
-        if (product.scenario !== userScenario) {
-          return false; // 适用场景不匹配，过滤掉
-        }
-      }
-
-      // 3. 性别过滤（暂忽略）
-
-      // 4. 楦型宽度过滤（暂忽略）
-
-      return true; // 通过所有过滤
-    });
-
-    // 如果过滤后没有商品，返回空列表
-    if (filteredProducts.length === 0) {
-      return CustomResponse.success([]);
-    }
-
-    // ========== 第二步：综合打分 ==========
+    // ========== 综合打分 ==========
     const results: ScoredProduct[] = [];
     
-    for (const product of filteredProducts) {
+    for (const product of products) {
       let stageScore = 0;
       let positioningScore = 0;
       let experienceScore = 0;
@@ -138,13 +82,6 @@ export class QuestionsCalculationController {
         const userAnswer = userAnswers[q.id];
         if (!userAnswer) continue;
         
-        // 过滤层的问题不参与打分
-        if (q.category === '鞋款类型匹配' || q.category === '适用场景匹配' || 
-            q.category === '性别匹配' || q.category === '楦型宽度匹配') {
-          continue;
-        }
-        
-        // 获取用户答案对应的选项配置
         const userOptions = optionsMap[q.id]?.[userAnswer] || [];
         
         if (q.category === '阶段匹配') {

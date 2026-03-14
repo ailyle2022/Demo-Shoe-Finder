@@ -39,47 +39,8 @@ let QuestionsCalculationController = class QuestionsCalculationController {
         }
         const allProducts = await this.productsService.findAll({ page: 1, pageSize: 100 });
         let products = allProducts.list;
-        let userShoeType = '';
-        let userScenario = '';
-        let userGender = '';
-        let userLastWidth = '';
-        for (const q of questions) {
-            const userAnswer = userAnswers[q.id];
-            if (!userAnswer)
-                continue;
-            const userOptions = optionsMap[q.id]?.[userAnswer] || [];
-            const firstOption = userOptions[0];
-            if (q.category === '鞋款类型匹配' && firstOption) {
-                userShoeType = firstOption.value;
-            }
-            else if (q.category === '适用场景匹配' && firstOption) {
-                userScenario = firstOption.value;
-            }
-            else if (q.category === '性别匹配') {
-                userGender = userAnswer;
-            }
-            else if (q.category === '楦型宽度匹配') {
-                userLastWidth = userAnswer;
-            }
-        }
-        const filteredProducts = products.filter(product => {
-            if (userShoeType) {
-                if (product.shoeType !== userShoeType) {
-                    return false;
-                }
-            }
-            if (userScenario) {
-                if (product.scenario !== userScenario) {
-                    return false;
-                }
-            }
-            return true;
-        });
-        if (filteredProducts.length === 0) {
-            return response_1.ApiResponse.success([]);
-        }
         const results = [];
-        for (const product of filteredProducts) {
+        for (const product of products) {
             let stageScore = 0;
             let positioningScore = 0;
             let experienceScore = 0;
@@ -87,10 +48,6 @@ let QuestionsCalculationController = class QuestionsCalculationController {
                 const userAnswer = userAnswers[q.id];
                 if (!userAnswer)
                     continue;
-                if (q.category === '鞋款类型匹配' || q.category === '适用场景匹配' ||
-                    q.category === '性别匹配' || q.category === '楦型宽度匹配') {
-                    continue;
-                }
                 const userOptions = optionsMap[q.id]?.[userAnswer] || [];
                 if (q.category === '阶段匹配') {
                     let matched = false;

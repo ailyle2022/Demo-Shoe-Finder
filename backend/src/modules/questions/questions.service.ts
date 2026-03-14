@@ -21,49 +21,7 @@ export class QuestionsService implements OnModuleInit {
     const count = await this.questionRepository.count();
     if (count > 0) return;
 
-    // 问题0: 性别（硬匹配过滤，暂忽略）
-    const q0 = await this.questionRepository.save({
-      question: '您的性别是？',
-      category: '性别匹配',
-      description: '用于筛选适合的鞋款',
-    });
-
-    const options0 = [
-      { questionId: q0.id, answer: '男', dimension: '性别匹配', field: 'gender', value: '男', score: 100 },
-      { questionId: q0.id, answer: '男', dimension: '性别匹配', field: 'gender', value: '中性', score: 100 },
-      { questionId: q0.id, answer: '女', dimension: '性别匹配', field: 'gender', value: '女', score: 100 },
-      { questionId: q0.id, answer: '女', dimension: '性别匹配', field: 'gender', value: '中性', score: 100 },
-    ];
-
-    // 问题1: 鞋款类型（硬匹配过滤）
-    const q1shoe = await this.questionRepository.save({
-      question: '您需要的鞋款类型是？',
-      category: '鞋款类型匹配',
-      description: '用于筛选鞋款类型',
-    });
-
-    const options1shoe = [
-      { questionId: q1shoe.id, answer: '路跑鞋', dimension: '鞋款类型匹配', field: 'shoeType', value: '路跑鞋', score: 100 },
-      { questionId: q1shoe.id, answer: '越野跑鞋', dimension: '鞋款类型匹配', field: 'shoeType', value: '越野跑鞋', score: 100 },
-      { questionId: q1shoe.id, answer: '训练鞋', dimension: '鞋款类型匹配', field: 'shoeType', value: '训练鞋', score: 100 },
-      { questionId: q1shoe.id, answer: '竞速鞋', dimension: '鞋款类型匹配', field: 'shoeType', value: '竞速鞋', score: 100 },
-    ];
-
-    // 问题2: 适用场景（硬匹配过滤）
-    const q2scenario = await this.questionRepository.save({
-      question: '您的主要跑步场景是？',
-      category: '适用场景匹配',
-      description: '用于筛选适用场景',
-    });
-
-    const options2scenario = [
-      { questionId: q2scenario.id, answer: '日常路跑', dimension: '适用场景匹配', field: 'scenario', value: '城市路跑', score: 100 },
-      { questionId: q2scenario.id, answer: '城市路跑', dimension: '适用场景匹配', field: 'scenario', value: '城市路跑', score: 100 },
-      { questionId: q2scenario.id, answer: '训练', dimension: '适用场景匹配', field: 'scenario', value: '训练', score: 100 },
-      { questionId: q2scenario.id, answer: '比赛', dimension: '适用场景匹配', field: 'scenario', value: '比赛', score: 100 },
-    ];
-
-    // 问题3: 跑步经验
+    // 问题1: 跑步经验
     const q1 = await this.questionRepository.save({
       question: '你的跑步经验是？',
       category: '阶段匹配',
@@ -142,7 +100,7 @@ export class QuestionsService implements OnModuleInit {
     ];
 
     // 保存所有选项
-    for (const opt of [...options0, ...options1shoe, ...options2scenario, ...options1, ...options2, ...options3]) {
+    for (const opt of [...options1, ...options2, ...options3]) {
       await this.optionRepository.save(opt);
     }
     
