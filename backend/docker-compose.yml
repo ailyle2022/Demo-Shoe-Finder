@@ -1,0 +1,33 @@
+# PostgreSQL 配置说明
+# 由于当前网络环境无法拉取Docker镜像，先使用SQLite作为开发数据库
+# 如需切换到PostgreSQL，请按以下步骤操作：
+
+# 1. 启动Docker Desktop
+# 2. 运行 docker compose up -d 启动PostgreSQL
+# 3. 修改 src/app.module.ts 中的数据库配置（取消注释PostgreSQL配置）
+# 4. 删除 demo.db 文件（SQLite数据库）
+# 5. 重启服务
+
+# docker-compose.yml 内容：
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: demo-postgres
+    environment:
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: demo123
+      POSTGRES_DB: demo
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U demo -d demo"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
