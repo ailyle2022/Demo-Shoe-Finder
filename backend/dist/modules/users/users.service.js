@@ -21,6 +21,32 @@ let UsersService = class UsersService {
     constructor(usersRepository) {
         this.usersRepository = usersRepository;
     }
+    async onModuleInit() {
+        await this.seedData();
+    }
+    async seedData() {
+        try {
+            const count = await this.usersRepository.count();
+            if (count > 0) {
+                console.log('Users already seeded, skipping...');
+                return;
+            }
+            console.log('Seeding users...');
+            const users = [
+                { username: 'admin', password: 'admin123', email: 'admin@example.com', nickname: 'Admin', role: 'admin' },
+                { username: 'user1', password: '123456', email: 'user1@example.com', nickname: 'User 1', role: 'user' },
+                { username: 'user2', password: '123456', email: 'user2@example.com', nickname: 'User 2', role: 'user' },
+            ];
+            for (const u of users) {
+                const user = this.usersRepository.create(u);
+                await this.usersRepository.save(user);
+            }
+            console.log('Users seeded successfully');
+        }
+        catch (error) {
+            console.error('Error seeding users:', error);
+        }
+    }
     async create(createUserDto) {
         const existingUser = await this.usersRepository.findOne({
             where: { username: createUserDto.username },

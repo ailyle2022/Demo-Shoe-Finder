@@ -1,9 +1,12 @@
+import { OnModuleInit } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { CreateUserDto, UpdateUserDto, UserQueryDto } from './user.entity.dto';
-export declare class UsersService {
+export declare class UsersService implements OnModuleInit {
     private usersRepository;
     constructor(usersRepository: Repository<User>);
+    onModuleInit(): Promise<void>;
+    private seedData;
     create(createUserDto: CreateUserDto): Promise<User>;
     findAll(query: UserQueryDto): Promise<{
         list: User[];
