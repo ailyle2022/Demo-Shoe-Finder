@@ -89,8 +89,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import axios from 'axios'
-
-const API_URL = 'http://localhost:3000/api'
+import { API_URL } from '@/api'
 
 // 列表数据
 const userList = ref<any[]>([])

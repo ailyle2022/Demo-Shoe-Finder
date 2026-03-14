@@ -96,8 +96,7 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Loading } from '@element-plus/icons-vue'
 import axios from 'axios'
-
-const API_URL = 'http://localhost:3000/api'
+import { API_URL } from '@/api'
 
 const loading = ref(true)
 const submitting = ref(false)

@@ -46,6 +46,7 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
+import { API_URL } from '@/api'
 
 const router = useRouter()
 const loginFormRef = ref()
@@ -73,7 +74,7 @@ const handleLogin = async () => {
     if (valid) {
       loading.value = true
       try {
-        const response = await axios.post('http://localhost:3000/api/auth/login', loginForm)
+        const response = await axios.post(`${API_URL}/auth/login`, loginForm)
         const { code, data, message } = response.data
         
         if (code === 200) {
