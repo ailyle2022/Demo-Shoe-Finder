@@ -7,9 +7,12 @@ import { GlobalExceptionFilter } from './common/exception.filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  // 启用CORS
+  // Railway: use PORT env var, default to 3000
+  const port = process.env.PORT || 3000;
+  
+  // 启用CORS - allow all in production
   app.enableCors({
-    origin: ['http://localhost:8080', 'http://127.0.0.1:8080'],
+    origin: true,
     credentials: true,
   });
   
@@ -30,7 +33,7 @@ async function bootstrap() {
     .setTitle('Demo API')
     .setDescription('Demo项目后端API文档')
     .setVersion('1.0')
-    .addServer('http://localhost:3000', '开发环境')
+    .addServer(`http://localhost:${port}`, '开发环境')
     .addTag('auth', '认证相关接口')
     .addTag('users', '用户管理接口')
     .addTag('products', '商品管理接口')
@@ -39,8 +42,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
 
-  await app.listen(3000);
-  console.log('Backend is running on: http://localhost:3000');
-  console.log('Swagger文档: http://localhost:3000/api-docs');
+  await app.listen(port);
+  console.log(`Backend is running on: http://localhost:${port}`);
+  console.log(`Swagger文档: http://localhost:${port}/api-docs`);
 }
 bootstrap();
