@@ -18,6 +18,7 @@ const user_entity_1 = require("./modules/users/user.entity");
 const product_entity_1 = require("./modules/products/product.entity");
 const question_entity_1 = require("./modules/questions/question.entity");
 const question_option_entity_1 = require("./modules/questions/question-option.entity");
+const database_init_service_1 = require("./database-init.service");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -43,6 +44,7 @@ exports.AppModule = AppModule = __decorate([
             products_module_1.ProductsModule,
             questions_module_1.QuestionsModule,
         ],
+        providers: [database_init_service_1.DatabaseInitService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

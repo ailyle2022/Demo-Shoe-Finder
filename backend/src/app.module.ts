@@ -9,6 +9,7 @@ import { User } from './modules/users/user.entity';
 import { Product } from './modules/products/product.entity';
 import { Question } from './modules/questions/question.entity';
 import { QuestionOption } from './modules/questions/question-option.entity';
+import { DatabaseInitService } from './database-init.service';
 
 @Module({
   imports: [
@@ -31,5 +32,6 @@ import { QuestionOption } from './modules/questions/question-option.entity';
     ProductsModule,
     QuestionsModule,
   ],
+  providers: [DatabaseInitService],
 })
 export class AppModule {}
