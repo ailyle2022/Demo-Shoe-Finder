@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const config_1 = require("@nestjs/config");
 const auth_module_1 = require("./modules/auth/auth.module");
 const users_module_1 = require("./modules/users/users.module");
 const products_module_1 = require("./modules/products/products.module");
@@ -23,9 +24,16 @@ exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            config_1.ConfigModule.forRoot({
+                isGlobal: true,
+            }),
             typeorm_1.TypeOrmModule.forRoot({
-                type: 'sqlite',
-                database: 'demo.db',
+                type: process.env.DB_TYPE === 'sqlite' ? 'sqlite' : 'postgres',
+                database: process.env.DB_TYPE === 'sqlite' ? 'demo.db' : process.env.DB_NAME || 'demo',
+                host: process.env.DB_HOST,
+                port: parseInt(process.env.DB_PORT || '5432'),
+                username: process.env.DB_USERNAME,
+                password: process.env.DB_PASSWORD,
                 entities: [user_entity_1.User, product_entity_1.Product, question_entity_1.Question, question_option_entity_1.QuestionOption],
                 synchronize: true,
                 logging: false,
