@@ -4,13 +4,13 @@ WORKDIR /app
 
 COPY package*.json ./
 
-# Install ALL dependencies (including devDependencies for nest CLI)
+# Install ALL dependencies
 RUN npm install
 
 COPY . .
 
-# Build using npx
-RUN npx nest build
+# Build using node_modules/.bin/nest
+RUN node ./node_modules/@nestjs/cli/bin/nest.js build
 
 EXPOSE 3000
 
